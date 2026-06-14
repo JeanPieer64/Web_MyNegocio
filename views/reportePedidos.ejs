@@ -1,0 +1,45 @@
+<%- include('partials/header') %>
+
+<center>
+    <br>
+    <h1><font color="#cc0000">Reporte General de Pedidos</font></h1>
+    <p></p>
+    <br>
+
+    <table border="1" cellpadding="10" cellspacing="0" width="90%" bgcolor="#ffffff">
+        <tr style="background-color: #333333; color: white;">
+            <th>N° Pedido</th>
+            <th>Fecha</th>
+            <th>Cliente</th>
+            <th>Atendido por</th>
+            <th>Total de Venta</th>
+            <th>Acción</th>
+        </tr>
+        
+        <% if (pedidos && pedidos.length > 0) { %>
+            <% pedidos.forEach(function(p) { %>
+                <tr>
+                    <td align="center"><b><%= p.IdPedido %></b></td>
+                    <td align="center"><%= p.Fecha || '-' %></td>
+                    <td><%= p.Cliente %></td>
+                    <td><%= p.Vendedor %></td>
+                    <td align="center">
+                        <font color="green"><b>S/ <%= parseFloat(p.Total || 0).toFixed(2) %></b></font>
+                    </td>
+                    <td align="center">
+                        <a href="/pedidos/buscar?idPedido=<%= p.IdPedido %>" style="color: blue; text-decoration: underline; font-weight: bold;">
+                            📄 Ver Boleta
+                        </a>
+                    </td>
+                </tr>
+            <% }); %>
+        <% } else { %>
+            <tr>
+                <td colspan="6" align="center">No hay pedidos registrados todavía.</td>
+            </tr>
+        <% } %>
+    </table>
+</center>
+<br><br>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,99 @@
+<%- include('partials/header') %>
+
+<center>
+    <br><br>
+    <h1><font color="#1A365D" face="Arial, sans-serif" size="7"><b>Bienvenidos a nuestra Tienda</b></font></h1>
+    <p><font size="4" color="#555555" face="Arial, sans-serif"><i>Calidad y rapidez directamente a tu puerta.</i></font></p>
+    <br>
+
+    <font size="7">🛒</font>
+    <br><br>
+
+    <table border="0" width="70%" cellpadding="30" bgcolor="#ffffff" style="border-top: 5px solid #1A365D; box-shadow: 0px 4px 15px rgba(0,0,0,0.1);">
+        <tr>
+            <td align="center">
+                <h2 style="color: #333333; font-family: Arial, sans-serif;">Nuestra Filosofía</h2>
+                <br>
+                <p align="justify" style="line-height: 1.8; font-size: 18px; color: #444444; font-family: Arial, sans-serif;">
+                    Nos dedicamos a ofrecerte el más amplio catálogo de productos con el stock siempre actualizado. 
+                    Trabajamos todos los días para asegurar que recibas artículos de la más alta calidad con envíos rápidos y seguros a todo el Rímac y el resto de Lima Metropolitana. 
+                    Nuestra misión es facilitarte la vida, brindándote un servicio de primera desde la comodidad de tu pantalla. 
+                    <br><br>
+                    <b>Utiliza el menú superior para navegar y gestionar nuestro sistema.</b>
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    <br><br><br>
+    
+    <h2><font color="#1A365D" face="Arial, sans-serif">Estado de la Tienda en Tiempo Real</font></h2>
+    <br>
+
+    <table border="1" cellpadding="15" cellspacing="0" width="70%" bgcolor="#ffffff" style="text-align: center; font-family: Arial, sans-serif; box-shadow: 0px 4px 15px rgba(0,0,0,0.05);">
+        <tr bgcolor="#f4f7f6">
+            <td width="33%">
+                <h3 style="color: #333">Total Productos</h3>
+                <h2><font color="blue"><%= totalProductos %></font></h2>
+            </td>
+            <td width="33%">
+                <h3 style="color: #333">Clientes</h3>
+                <h2><font color="green"><%= totalClientes %></font></h2>
+            </td>
+            <td width="33%">
+                <h3 style="color: #333">Ventas Realizadas</h3>
+                <h2><font color="purple"><%= totalPedidos %></font></h2>
+            </td>
+        </tr>
+    </table>
+    
+    <br><br>
+
+    <table border="0" cellpadding="10" cellspacing="15" width="70%" style="font-family: Arial, sans-serif;">
+        <tr>
+            <td width="50%" valign="top">
+                <table border="1" cellpadding="10" cellspacing="0" width="100%" bgcolor="#fff0f0">
+                    <tr bgcolor="#cc0000">
+                        <th colspan="2"><font color="white">Productos Agotados (0 Stock)</font></th>
+                    </tr>
+                    <% if (agotados && agotados.length > 0) { %>
+                        <% agotados.forEach(function(p) { %>
+                            <tr>
+                                <td><%= p.NombreProducto %></td>
+                                <td align="center"><b><font color="red">0</font></b></td>
+                            </tr>
+                        <% }); %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="2" align="center">¡Excelente! No hay productos agotados.</td>
+                        </tr>
+                    <% } %>
+                </table>
+            </td>
+
+            <td width="50%" valign="top">
+                <table border="1" cellpadding="10" cellspacing="0" width="100%" bgcolor="#fffdf0">
+                    <tr bgcolor="#d4a000">
+                        <th colspan="2"><font color="white">Poco Stock</font></th>
+                    </tr>
+                    <% if (porAgotarse && porAgotarse.length > 0) { %>
+                        <% porAgotarse.forEach(function(p) { %>
+                            <tr>
+                                <td><%= p.NombreProducto %></td>
+                                <td align="center"><b><font color="#d4a000"><%= p.UnidadesEnExistencia %></font></b></td>
+                            </tr>
+                        <% }); %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="2" align="center">Todo tu inventario está saludable.</td>
+                        </tr>
+                    <% } %>
+                </table>
+            </td>
+        </tr>
+    </table>
+</center>
+
+<br><br><br>
+
+<%- include('partials/footer') %>

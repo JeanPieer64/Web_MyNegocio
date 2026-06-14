@@ -1,0 +1,95 @@
+<%- include('partials/header') %>
+
+<style>
+    @media print {
+        /* ¡ESTO ES LO NUEVO! Quita el título, fecha y URL automáticos del navegador */
+        @page {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+        /* 1. Ocultamos toda la página por defecto */
+        body * {
+            visibility: hidden;
+        }
+        /* 2. Hacemos visible SOLO lo que esté dentro de 'zonaImprimible' */
+        #zonaImprimible, #zonaImprimible * {
+            visibility: visible;
+        }
+        /* 3. Movemos la boleta a la esquina superior izquierda de la hoja */
+        #zonaImprimible {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+        }
+        /* 4. Ocultamos el botón rojo de PDF para que no salga impreso en la hoja */
+        #btnImprimir {
+            display: none !important;
+        }
+    }
+</style>
+
+<div style="padding: 20px 50px;">
+    <h2>Buscar Pedido</h2>
+    
+    <form action="/pedidos/buscar" method="GET">
+        <input type="number" name="idPedido" placeholder="Ingrese N° Pedido" required style="padding: 5px;">
+        <button type="submit" style="padding: 5px 15px;">Buscar</button>
+    </form>
+    
+    <hr style="margin-top: 20px; margin-bottom: 20px;">
+
+    <% if (typeof error !== 'undefined' && error) { %>
+        <p style="color: red;"><b><%= error %></b></p>
+    <% } %>
+
+    <% if (pedidoInfo) { %>
+        <div id="zonaImprimible">
+            <h3>Datos del Pedido</h3>
+            <p><b>N° Pedido:</b> <%= pedidoInfo.IdPedido %></p>
+            <p><b>Fecha y Hora:</b> <%= pedidoInfo.FechaBonita || 'Sin fecha' %></p>
+
+            <button id="btnImprimir" onclick="window.print()" style="padding: 5px 15px; margin-bottom: 20px; background-color: #cc0000; color: white; border: none; cursor: pointer;">📄 Descargar PDF</button>
+
+            <table border="1" cellpadding="10" cellspacing="0" width="100%" bgcolor="#ffffff" style="border-collapse: collapse;">
+                <tr bgcolor="#333333">
+                    <th><font color="white">Item</font></th>
+                    <th align="left"><font color="white">Producto</font></th>
+                    <th><font color="white">Precio Unit.</font></th>
+                    <th><font color="white">Cantidad</font></th>
+                    <th><font color="white">Descuento</font></th>
+                    <th><font color="white">Total</font></th>
+                </tr>
+                
+                <% let granTotal = 0; %>
+                <% detalles.forEach(function(det, index) { %>
+                    <tr>
+                        <td align="center"><%= index + 1 %></td>
+                        <td><%= det.NombreProducto %></td>
+                        <td align="center">S/ <%= parseFloat(det.PrecioUnidad).toFixed(2) %></td>
+                        <td align="center"><%= det.Cantidad %></td>
+                        <td align="center"><%= (det.Descuento * 100).toFixed(0) %>%</td>
+                        <td align="center"><b>S/ <%= parseFloat(det.Total).toFixed(2) %></b></td>
+                    </tr>
+                    <% granTotal += parseFloat(det.Total); %>
+                <% }); %>
+                
+                <tr>
+                    <td colspan="5" align="right" bgcolor="#f4f7f6"><h3>Total Pagado:</h3></td>
+                    <td align="center" bgcolor="#f4f7f6"><h3><font color="red">S/ <%= granTotal.toFixed(2) %></font></h3></td>
+                </tr>
+            </table>
+        </div>
+    <% } %>
+</div>
+
+<br><br>
+<script>
+    const parametrosURL = new URLSearchParams(window.location.search);
+    
+    if (parametrosURL.get('nuevo') === 'si') {
+        const numeroGenerado = parametrosURL.get('idPedido');
+        alert("✅ ¡Venta registrada con éxito!\n\nEl sistema le asignó el N° de Pedido: " + numeroGenerado);
+    }
+</script>
+<%- include('partials/footer') %>

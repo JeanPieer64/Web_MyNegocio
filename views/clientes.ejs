@@ -1,0 +1,48 @@
+<%- include('partials/header') %>
+
+<center>
+    <h1><font color="#1A365D">Directorio de Clientes</font></h1>
+    <p><font size="4"></font></p>
+    
+    <br>
+    <table border="0" width="80%">
+        <tr>
+            <td align="right">
+                <!-- Preparando el futuro botón de Nuevo Cliente -->
+                <a href="/clientes/nuevo"><font color="green" size="4"><b>[+] Nuevo Cliente</b></font></a>
+            </td>
+        </tr>
+    </table>
+    <br>
+
+    <!-- Tabla que muestra los clientes -->
+    <table border="1" cellpadding="10" cellspacing="0" width="80%" bgcolor="#ffffff">
+        <tr bgcolor="#333333">
+            <th><font color="white">ID</font></th>
+            <th><font color="white">Empresa</font></th>
+            <th><font color="white">Nombre de Contacto</font></th>
+            <th><font color="white">Ciudad</font></th>
+            <th><font color="white">Teléfono</font></th>
+            <th><font color="white">Acciones</font></th>
+        </tr>
+        
+        <% clientes.forEach(function(cli) { %>
+            <tr>
+                <td align="center"><b><%= cli.IdCliente %></b></td>
+                <td><%= cli.NombreEmpresa %></td>
+                <td><%= cli.NombreContacto %></td>
+                <td align="center"><%= cli.Ciudad %></td>
+                <td align="center"><%= cli.Telefono %></td>
+                <td align="center">
+                    <a href=/clientes/editar/<%= cli.IdCliente %>><font color="blue">Editar</font></a> | 
+                    <a href="/clientes/eliminar/<%= cli.IdCliente %>"><font color="red">Eliminar</font></a>
+                </td>
+            </tr>
+        <% }); %>
+
+    </table>
+</center>
+
+<br><br>
+
+<%- include('partials/footer') %>

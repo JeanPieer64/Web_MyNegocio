@@ -1,0 +1,28 @@
+<%- include('partials/header') %>
+
+<center>
+    <br>
+    <h1><font color="#1A365D">➕ Registrar Nuevo Empleado</font></h1>
+    <br>
+
+    <form action="/empleados/guardar" method="POST">
+        <table border="1" cellpadding="10" cellspacing="0" width="40%" bgcolor="#f4f7f6">
+            <tr>
+                <td><b>Nombres:</b></td>
+                <td><input type="text" name="nombre" required style="width: 100%; padding: 5px;"></td>
+            </tr>
+            <tr>
+                <td><b>Apellidos:</b></td>
+                <td><input type="text" name="apellidos" required style="width: 100%; padding: 5px;"></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <button type="submit" style="padding: 10px 20px; background-color: green; color: white; border: none; cursor: pointer;">💾 Guardar Empleado</button>
+                    <a href="/empleados" style="margin-left: 10px; color: red;">Cancelar</a>
+                </td>
+            </tr>
+        </table>
+    </form>
+</center>
+
+<%- include('partials/footer') %>

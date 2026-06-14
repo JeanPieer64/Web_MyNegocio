@@ -1,0 +1,55 @@
+<%- include('partials/header') %>
+
+<center>
+    <h1><font color="#0000cc">Editar Producto #<%= producto.IdProducto %></font></h1>
+    <br>
+
+    <form action="/productos/actualizar" method="POST">
+        <input type="hidden" name="idProducto" value="<%= producto.IdProducto %>">
+
+        <table border="1" cellpadding="10" cellspacing="0" width="50%" bgcolor="#ffffff">
+            <tr bgcolor="#333333">
+                <th colspan="2"><font color="white">Modificar Datos</font></th>
+            </tr>
+            <tr>
+                <td align="right"><b>Nombre del Producto:</b></td>
+                <td><input type="text" name="nombre" required size="30" value="<%= producto.NombreProducto %>"></td>
+            </tr>
+            <tr>
+                <td align="right"><b>Precio Unitario (S/):</b></td>
+                <td><input type="number" step="0.01" name="precio" required value="<%= producto.PrecioUnidad %>"></td>
+            </tr>
+            <tr>
+                <td align="right"><b>Stock en Existencia:</b></td>
+                <td><input type="number" name="stock" required value="<%= producto.UnidadesEnExistencia %>"></td>
+            </tr>
+            <tr>
+                <td align="right"><b>Categoría:</b></td>
+                <td>
+                    <select name="idCategoria" required>
+                        <% categorias.forEach(function(cat) { %>
+                            <option value="<%= cat.IdCategoria %>" <%= producto.IdCategoria == cat.IdCategoria ? 'selected' : '' %>>
+                                <%= cat.NombreCategoria %>
+                            </option>
+                        <% }); %>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td align="right"><b>Descuento (%):</b></td>
+                <td><input type="number" name="descuentoPorcentaje" value="<%= (producto.Descuento * 100).toFixed(0) %>" min="0" max="100" required></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center" bgcolor="#f4f7f6">
+                    <input type="submit" value="Actualizar Producto">
+                    &nbsp;&nbsp;&nbsp;
+                    <a href="/productos"><font color="red">Cancelar</font></a>
+                </td>
+            </tr>
+        </table>
+    </form>
+</center>
+
+<br><br>
+
+<%- include('partials/footer') %>

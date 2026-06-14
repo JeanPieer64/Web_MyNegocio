@@ -1,0 +1,164 @@
+<%- include('partials/header') %>
+
+<center>
+    <br>
+    <h1><font color="#1A365D">Registrar Nueva Venta</font></h1>
+    <br>
+
+    <form action="/pedidos/guardar" method="POST" id="formVenta">
+        
+        <table border="1" cellpadding="10" cellspacing="0" width="70%" bgcolor="#f4f7f6">
+            <tr>
+                <td>
+                    <b>Cliente:</b><br>
+                    <select name="idCliente" required style="width: 100%; padding: 5px;">
+                        <option value="">-- Seleccione Cliente --</option>
+                        <% clientes.forEach(c => { %>
+                            <option value="<%= c.IdCliente %>">
+                                <%= c.NombreEmpresa %>
+                            </option>
+                        <% }) %>
+                    </select>
+                </td>
+                <td>
+                    <b>Atendido por (Vendedor):</b><br>
+                    <select name="idEmpleado" required style="width: 100%; padding: 5px;">
+                        <option value="">-- Seleccione Empleado --</option>
+                        <% empleados.forEach(e => { %>
+                            <option value="<%= e.IdEmpleado %>"><%= e.Nombre %> <%= e.Apellidos %></option>
+                        <% }) %>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <br>
+
+        <table border="0" width="80%">
+            <tr>
+                <td width="60%">
+                    <b>Producto:</b>
+                    <select id="selectProducto" style="width: 100%; padding: 5px;">
+                        <% productos.forEach(p => { %>
+                            <option value="<%= p.IdProducto %>" 
+                                    data-precio="<%= p.PrecioUnidad %>" 
+                                    data-nombre="<%= p.NombreProducto %>" 
+                                    data-stock="<%= p.UnidadesEnExistencia %>"
+                                    data-descuento="<%= p.Descuento || 0 %>"
+                                    data-categoria="<%= p.NombreCategoria %>">
+                                [<%= p.NombreCategoria %>] <%= p.NombreProducto %> (S/ <%= p.PrecioUnidad %>) - Stock: <%= p.UnidadesEnExistencia %>
+                            </option>
+                        <% }) %>
+                    </select>
+                </td>
+                <td width="20%" align="center">
+                    <b>Cantidad:</b><br>
+                    <input type="number" id="inputCantidad" value="1" min="1" style="width: 60px; padding: 5px;">
+                </td>
+                <td width="20%" align="center">
+                    <br>
+                    <button type="button" onclick="agregarAlCarrito()" style="padding: 6px 15px; background-color: #1A365D; color: white; border: none; cursor: pointer;">➕ Agregar</button>
+                </td>
+            </tr>
+        </table>
+        <br>
+
+        <table border="1" cellpadding="10" cellspacing="0" width="90%" bgcolor="#ffffff" id="tablaCarrito">
+            <tr style="background-color: #333333; color: white;">
+                <th>Categoría</th>
+                <th>Producto</th>
+                <th>Precio Base</th>
+                <th>Cantidad</th>
+                <th>Descuento</th>
+                <th>Subtotal</th>
+                <th>Acción</th>
+            </tr>
+        </table>
+
+        <h2 align="right" style="width: 90%;">Total a Pagar: <font color="red">S/ <span id="granTotal">0.00</span></font></h2>
+
+        <input type="hidden" name="carrito" id="inputOcultoCarrito">
+        
+        <button type="submit" style="padding: 10px 30px; background-color: green; color: white; font-size: 18px; border: none; cursor: pointer;">
+            Guardar Pedido
+        </button>
+    </form>
+</center>
+<br><br>
+
+<script>
+    let carrito = [];
+
+    function agregarAlCarrito() {
+        const select = document.getElementById('selectProducto');
+        const opcion = select.options[select.selectedIndex];
+        
+        const id = opcion.value;
+        const nombre = opcion.getAttribute('data-nombre');
+        const categoria = opcion.getAttribute('data-categoria');
+        const precio = parseFloat(opcion.getAttribute('data-precio'));
+        const stock = parseInt(opcion.getAttribute('data-stock')); 
+        const descuentoBD = parseFloat(opcion.getAttribute('data-descuento')); 
+        
+        const cantidad = parseInt(document.getElementById('inputCantidad').value);
+        
+        if (cantidad > stock) {
+            alert('⚠️ ¡Atención! Solo hay ' + stock + ' unidades disponibles de ' + nombre + '.');
+            return; 
+        }
+
+        const subtotalBruto = precio * cantidad;
+        const montoDescuento = subtotalBruto * descuentoBD;
+        const subtotalNeto = subtotalBruto - montoDescuento;
+
+        const porcentajeVisual = (descuentoBD * 100).toFixed(0) + '%';
+
+        carrito.push({ id, nombre, categoria, precio, cantidad, descuentoBD, porcentajeVisual, subtotal: subtotalNeto });
+        
+        dibujarTabla();
+    }
+
+    function dibujarTabla() {
+        const tabla = document.getElementById('tablaCarrito');
+        
+        while(tabla.rows.length > 1) { tabla.deleteRow(1); }
+
+        let total = 0;
+
+        carrito.forEach((item, index) => {
+            const fila = tabla.insertRow(-1); 
+            fila.insertCell(0).innerText = item.categoria;
+            fila.insertCell(1).innerText = item.nombre;
+            fila.insertCell(2).innerText = 'S/ ' + item.precio.toFixed(2);
+            fila.insertCell(3).innerHTML = '<center>' + item.cantidad + '</center>';
+            
+            if (item.descuentoBD > 0) {
+                fila.insertCell(4).innerHTML = '<center><font color="green">-' + item.porcentajeVisual + '</font></center>';
+            } else {
+                fila.insertCell(4).innerHTML = '<center><font color="gray">0%</font></center>';
+            }
+            
+            fila.insertCell(5).innerHTML = '<b>S/ ' + item.subtotal.toFixed(2) + '</b>';
+            fila.insertCell(6).innerHTML = `<center><button type="button" onclick="eliminarItem(${index})" style="color:red; background:none; border:none; cursor:pointer; font-size:16px;">❌</button></center>`;
+            
+            total += item.subtotal;
+        });
+
+        document.getElementById('granTotal').innerText = total.toFixed(2);
+    }
+
+    function eliminarItem(index) {
+        carrito.splice(index, 1); 
+        dibujarTabla(); 
+    }
+
+    document.getElementById('formVenta').onsubmit = function() {
+        if(carrito.length === 0) {
+            alert("El carrito está vacío. Agrega al menos un producto.");
+            return false; 
+        }
+        document.getElementById('inputOcultoCarrito').value = JSON.stringify(carrito);
+        return true;
+    };
+</script>
+
+<%- include('partials/footer') %>

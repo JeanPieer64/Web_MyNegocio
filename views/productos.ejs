@@ -1,0 +1,56 @@
+<%- include('partials/header') %>
+
+<center>
+    <h1><font color="#cc0000">Gestión de Productos</font></h1>
+    <p><font size="4"></font></p>
+    
+    <br>
+    <table border="0" width="80%">
+        <tr>
+            <td align="right">
+                <a href="/productos/nuevo"><font color="green" size="4"><b>[+] Nuevo Producto</b></font></a>            
+            </td>
+        </tr>
+    </table>
+    <br>
+
+    <table border="1" cellpadding="10" cellspacing="0" width="80%" bgcolor="#ffffff">
+        <tr style="background-color: #333333; color: white;">
+            <th>ID</th>
+            <th>Nombre del Producto</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Categoría</th>
+            <th>Descuento</th>
+            <th>Acciones</th>
+        </tr>
+        
+        <% productos.forEach(function(prod) { %>
+            <tr>
+                <td align="center"><b><%= prod.IdProducto %></b></td>
+                <td><%= prod.NombreProducto %></td>
+                
+                <td align="center">S/ <%= prod.PrecioUnidad %></td>
+                <td align="center"><%= prod.UnidadesEnExistencia %></td>
+                <td align="center"><%= prod.NombreCategoria %></td>
+                
+                <td align="center">
+                    <% if (prod.Descuento > 0) { %>
+                        <font color="green"><b><%= (prod.Descuento * 100).toFixed(0) %>%</b></font>
+                    <% } else { %>
+                        <font color="gray">0%</font>
+                    <% } %>
+                </td>
+                
+                <td align="center">
+                    <a href="/productos/editar/<%= prod.IdProducto %>"><font color="blue">Editar</font></a> |
+                    <a href="/productos/eliminar/<%= prod.IdProducto %>"><font color="red">Eliminar</font></a>
+                </td>
+            </tr>
+        <% }); %>
+
+    </table>
+    <br><br>
+</center>
+
+<%- include('partials/footer') %>

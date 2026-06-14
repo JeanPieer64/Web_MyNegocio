@@ -1,0 +1,37 @@
+<%- include('partials/header') %>
+
+<center>
+    <h1><font color="#1A365D">Editar Cliente #<%= cliente.IdCliente %></font></h1>
+    <br>
+
+    <form action="/clientes/actualizar/<%= cliente.IdCliente %>" method="POST">
+        <table border="1" cellpadding="10" cellspacing="0" width="50%" bgcolor="#ffffff">
+            <tr bgcolor="#333333">
+                <th colspan="2"><font color="white">Modificar Datos de la Empresa</font></th>
+            </tr>
+            <tr>
+                <td align="right"><b>Nombre de la Empresa:</b></td>
+                <td><input type="text" name="empresa" required size="30" value="<%= cliente.NombreEmpresa %>"></td>
+            </tr>
+            <tr>
+                <td align="right"><b>Nombre del Contacto:</b></td>
+                <td><input type="text" name="contacto" required size="30" value="<%= cliente.NombreContacto %>"></td>
+            </tr>
+            <tr>
+                <td align="right"><b>Teléfono:</b></td>
+                <td><input type="text" name="telefono" required value="<%= cliente.Telefono %>"></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center" bgcolor="#f4f7f6">
+                    <input type="submit" value="Actualizar Cliente">
+                    &nbsp;&nbsp;&nbsp;
+                    <a href="/clientes"><font color="red">Cancelar</font></a>
+                </td>
+            </tr>
+        </table>
+    </form>
+</center>
+
+<br><br>
+
+<%- include('partials/footer') %>

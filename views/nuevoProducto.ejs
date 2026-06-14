@@ -1,0 +1,55 @@
+<%- include('partials/header') %>
+
+<center>
+    <h1><font color="#cc0000">Registrar Nuevo Producto</font></h1>
+    <p>Complete los datos para guardar en la base de datos.</p>
+    <br>
+
+    <form action="/productos/guardar" method="POST">
+        <table border="1" cellpadding="10" cellspacing="0" width="50%" bgcolor="#ffffff">
+            <tr bgcolor="#333333">
+                <th colspan="2"><font color="white">Datos del Producto</font></th>
+            </tr>
+            <tr>
+                <td align="right"><b>Categoría:</b></td>
+                <td>
+                    <select name="idCategoria" required style="width: 100%; padding: 3px;">
+                        <option value="">-- Seleccione una Categoría --</option>
+                        <% categorias.forEach(function(cat) { %>
+                            <option value="<%= cat.IdCategoria %>"><%= cat.NombreCategoria %></option>
+                        <% }); %>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td align="right"><b>Nombre del Producto:</b></td>
+                <td><input type="text" name="nombre" required style="width: 100%; padding: 3px;"></td>
+            </tr>
+            <tr>
+                <td align="right"><b>Precio Unitario (S/):</b></td>
+                <td><input type="number" step="0.01" name="precio" required style="width: 100%; padding: 3px;"></td>
+            </tr>
+            <tr>
+                <td align="right"><b>Stock en Existencia:</b></td>
+                <td><input type="number" name="stock" required style="width: 100%; padding: 3px;"></td>
+            </tr>
+            <tr>
+                <td align="right"><b>Descuento (%):</b><br><small><font color="gray">Ej: Pon 15 para 15%</font></small></td>
+                <td><input type="number" name="descuentoPorcentaje" value="0" min="0" max="100" required style="width: 100%; padding: 3px;"></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center" bgcolor="#f4f7f6">
+                    <br>
+                    <input type="submit" value="Guardar Producto" style="padding: 8px 15px; cursor: pointer;">
+                    &nbsp;&nbsp;&nbsp;
+                    <a href="/productos"><font color="red">Cancelar</font></a>
+                    <br><br>
+                </td>
+            </tr>
+        </table>
+    </form>
+</center>
+
+<br><br>
+
+<%- include('partials/footer') %>

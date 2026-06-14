@@ -1,0 +1,43 @@
+<%- include('partials/header') %>
+
+<center>
+    <br>
+    <h1><font color="#1A365D">Lista de Empleados</font></h1> 
+    
+    <div style="width: 70%; text-align: right; margin-bottom: 10px;">
+        <a href="/empleados/nuevo" style="color: green; font-weight: bold; font-size: 18px; text-decoration: underline;">
+            [+] Nuevo Empleado
+        </a>
+    </div>
+    <br>
+
+    <table border="1" cellpadding="10" cellspacing="0" width="70%" bgcolor="#ffffff">
+        
+        <tr style="background-color: #333333; color: white;">
+            <th style="padding: 10px;">ID Empleado</th>
+            <th style="padding: 10px;">Nombre</th>
+            <th style="padding: 10px;">Apellidos</th>
+            <th style="padding: 10px;">Acciones</th>
+        </tr>s
+        <% if (empleados && empleados.length > 0) { %>
+            <% empleados.forEach(e => { %>
+                <tr>
+                    <td align="center"><%= e.IdEmpleado %></td>
+                    <td><%= e.Nombre %></td>
+                    <td><%= e.Apellidos %></td>
+                    <td align="center">
+                        <a href="/empleados/editar/<%= e.IdEmpleado %>" style="color: blue; text-decoration: underline;">Editar</a> | 
+                        <a href="/empleados/eliminar/<%= e.IdEmpleado %>" style="color: red; text-decoration: underline;">Eliminar</a>
+                </td>
+                </tr>
+            <% }) %>
+        <% } else { %>
+            <tr>
+                <td colspan="4" align="center">No hay empleados registrados en el sistema.</td>
+            </tr>
+        <% } %>
+    </table>
+</center>
+<br><br>
+
+<%- include('partials/footer') %>
