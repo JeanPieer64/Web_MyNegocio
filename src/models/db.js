@@ -1,20 +1,16 @@
-const mysql = require('mysql2');
+const mysql = require('mysql');
 
-// Configuración de la conexión a tu base de datos
-const conexion = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'jeanpieer', // <-- Si tienes contraseña en tu MySQL (XAMPP/Workbench), ponla aquí
-    database: 'BDMynegocio'
+const db = mysql.createConnection({
+    host: process.env.DB_HOST || 'localhost',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || '', // Tu clave local aquí (si tienes)
+    database: process.env.DB_NAME || 'mynegocio', // Tu base de datos local
+    port: process.env.DB_PORT || 3306
 });
 
-// Probar la conexión
-conexion.connect((err) => {
-    if (err) {
-        console.error('Error crítico al conectar a bdmynegocio:', err);
-        return;
-    }
-    console.log('¡Conectado exitosamente a la base de datos bdmynegocio! 🛢️');
+db.connect((err) => {
+    if (err) throw err;
+    console.log('Conectado a la base de datos');
 });
 
-module.exports = conexion;
+module.exports = db;
