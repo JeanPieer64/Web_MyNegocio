@@ -1,4 +1,4 @@
-const mysql = require('mysql');
+const mysql = require('mysql2');
 
 // 1. PRIMERO definimos la constante 'db' usando la configuración
 const db = mysql.createConnection({
