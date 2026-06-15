@@ -2,10 +2,11 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title><%= titulo %></title>
+    <title><%= typeof titulo !== 'undefined' ? titulo : 'Minimarket El Rápidos' %> - Dashboard</title>
+    
+    <link rel="icon" href="/logo.png" type="image/png">
     
     <style>
-        /* Estilo base del menú */
         .menu-item {
             color: white;
             text-decoration: none;
@@ -15,23 +16,20 @@
             display: inline-block;
         }
         
-        /* Contenedor del desplegable */
         .dropdown {
             position: relative;
             display: inline-block;
         }
 
-        /* La ventanita roja que está oculta por defecto */
         .dropdown-content {
             display: none;
             position: absolute;
-            background-color: #1A365D; /* Color rojo del video */
+            background-color: #1A365D;
             min-width: 200px;
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
             z-index: 1;
         }
 
-        /* Los enlaces dentro de la ventanita roja */
         .dropdown-content a {
             color: white;
             padding: 12px 16px;
@@ -40,14 +38,21 @@
             font-family: Arial, sans-serif;
         }
 
-        /* Cambiar a un rojo más oscuro cuando pasas el ratón dentro de la ventanita */
         .dropdown-content a:hover {
             background-color: #112240;
         }
 
-        /* ¡LA MAGIA!: Mostrar la ventanita cuando pasas el ratón por el menú principal */
         .dropdown:hover .dropdown-content {
             display: block;
+        }
+
+        /* Estilo para el logo en el menú */
+        .logo-icon {
+            width: 35px; 
+            height: 35px; 
+            vertical-align: middle;
+            margin-right: 10px;
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -55,8 +60,9 @@
 
     <table width="100%" bgcolor="#212529" cellpadding="10" cellspacing="0" border="0">
         <tr>
-            <td width="20%" align="left">
-                <b><font color="white" size="5" face="Arial">&nbsp;&nbsp;Minimarket El Rápidos</font></b>
+            <td width="30%" align="left">
+                <img src="/logo.png" alt="Logo" class="logo-icon">
+                <font color="white" size="5" face="Arial">Minimarket El Rápidos</font>
             </td>
             
             <td align="center">
