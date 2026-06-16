@@ -1,7 +1,6 @@
 const db = require('../models/db');
 
 exports.reportePedidos = (req, res) => {
-    // Consulta "a prueba de balas" contra valores nulos en datos antiguos
     const query = `
         SELECT 
             p.IdPedido, 
