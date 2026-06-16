@@ -49,8 +49,32 @@ const obtenerPedidosPorCliente = (req, res) => {
     });
 };
 
+const verDetallePedido = (req, res) => {
+    const idPedido = req.params.id;
+    
+    const sqlPedido = `
+        SELECT p.IdPedido, p.FechaPedido, c.NombreEmpresa, e.Nombre AS Empleado
+        FROM pedido p
+        JOIN cliente c ON p.IdCliente = c.IdCliente
+        JOIN empleado e ON p.IdEmpleado = e.IdEmpleado
+        WHERE p.IdPedido = ?
+    `;
+    
+    db.query(sqlPedido, [idPedido], (err, resultado) => {
+        if (err) {
+            console.log("Error al cargar boleta:", err);
+            return res.status(500).send("Error en la BD");
+        }
+        
+        res.render('detallePedido', {
+            pedido: resultado[0] 
+        });
+    });
+};
+
 module.exports = {
     cargarExamen,
     obtenerClientesPorPais,
-    obtenerPedidosPorCliente
+    obtenerPedidosPorCliente,
+    verDetallePedido
 };

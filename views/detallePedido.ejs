@@ -1,0 +1,50 @@
+<%- include('partials/header') %>
+
+<style>
+    @media print {
+        body * {
+            visibility: hidden; 
+        }
+        #area-imprimir, #area-imprimir * {
+            visibility: visible; 
+        }
+        #area-imprimir {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            border: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        .ocultar-al-imprimir {
+            display: none !important; 
+        }
+    }
+</style>
+
+<div id="area-imprimir" style="width: 50%; margin: 40px auto; font-family: 'Courier New', Courier, monospace; border: 2px dashed #333; padding: 30px; background-color: #fdfdfd;">
+    
+    <h2 style="text-align: center; text-transform: uppercase; border-bottom: 2px solid #333; padding-bottom: 10px;">
+        Documento de Pedido
+    </h2>
+    
+    <div style="font-size: 16px; line-height: 1.8; margin-top: 20px;">
+        <p><strong>N° de Pedido:</strong> <%= pedido.IdPedido %></p>
+        <p><strong>Cliente:</strong> <%= pedido.NombreEmpresa %></p>
+        <p><strong>Atendido por:</strong> <%= pedido.Empleado %></p>
+        <p><strong>Fecha de Emisión:</strong> <%= pedido.FechaPedido ? pedido.FechaPedido.substring(0, 10) : 'N/A' %></p>
+    </div>
+    
+    <div class="ocultar-al-imprimir" style="text-align: center; margin-top: 40px;">
+        <button onclick="window.print()" style="padding: 10px 25px; font-size: 16px; font-weight: bold; background-color: #333; color: white; border: none; cursor: pointer;">
+            Imprimir Documento
+        </button>
+    </div>
+</div>
+
+<div class="ocultar-al-imprimir" style="text-align: center; margin-top: 20px;">
+    <a href="/reportes/pedidos-pais-cliente" style="color: blue; font-family: Arial, sans-serif;">⬅ Volver al reporte</a>
+</div>
+
+<%- include('partials/footer') %>
