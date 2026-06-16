@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const db = require('./src/models/db');
@@ -20,7 +21,9 @@ const productoRoutes = require('./src/routes/productoRoutes');
 const pedidoRoutes = require('./src/routes/pedidoRoutes');
 const reporteRoutes = require('./src/routes/reporteRoutes');
 const empleadoRoutes = require('./src/routes/empleadoRoutes');
+const examenRoutes = require('./src/routes/examenRoutes');
 
+app.use(examenRoutes);
 app.use(indexRoutes);
 app.use(clienteRoutes);
 app.use('/productos', productoRoutes);

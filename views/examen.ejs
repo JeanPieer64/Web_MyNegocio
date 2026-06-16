@@ -1,0 +1,131 @@
+<%- include('partials/header') %>
+
+<div style="width: 80%; margin: 30px auto; font-family: Arial, sans-serif;">
+    
+    <h2 style="text-align: center; color: #b30000; font-family: 'Times New Roman', Times, serif; font-size: 28px; margin-bottom: 30px;">
+        Pedidos x País y Cliente
+    </h2>
+
+    <div style="padding: 10px 0 30px 0; display: flex; justify-content: space-around; align-items: flex-end;">
+        
+        <div>
+            <label style="font-weight: bold; font-size: 14px; display: block; text-align: center; margin-bottom: 8px;">PAISES</label>
+            <select id="cboPais" size="8" style="width: 200px; padding: 5px; border: 1px solid #ccc;">
+                <option value="">-- Seleccione un País --</option>
+                <% paises.forEach(function(p) { %>
+                    <option value="<%= p.Pais %>"><%= p.Pais %></option>
+                <% }); %>
+            </select>
+        </div>
+
+        <div>
+            <label style="font-weight: bold; font-size: 14px; display: block; text-align: center; margin-bottom: 8px;">CLIENTES</label>
+            <select id="cboCliente" size="8" style="width: 250px; padding: 5px; border: 1px solid #ccc;">
+            </select>
+        </div>
+
+        <div>
+            <button id="btnVerPedidos" style="padding: 8px 15px; font-weight: bold; cursor: pointer; border: 1px solid #333; background-color: #f9f9f9; color: #333;">Ver Pedidos</button>
+        </div>
+    </div>
+
+    <table width="100%" border="1" cellspacing="0" cellpadding="10" style="text-align: center; border-collapse: collapse; border-color: #ccc;">
+        <thead style="background-color: #333333; color: white; font-weight: bold;">
+            <tr>
+                <th>IdPedido</th>
+                <th>Fecha Pedido</th>
+                <th>Empleado</th>
+                <th>Fecha Entrega</th>
+            </tr>
+        </thead>
+        <tbody id="tablaPedidos" style="background-color: #ffffff; color: #000000;">
+            <tr>
+                <td colspan="4">Seleccione un cliente y haga clic en "Ver Pedidos"</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div style="text-align: center; margin-top: 30px;">
+        <a href="/reportes" style="color: #0000EE; text-decoration: none; font-weight: bold; font-size: 16px;">
+            ⬅ Volver al menú de Reportes
+        </a>
+    </div>
+
+</div>
+
+<script>
+    document.getElementById('cboPais').addEventListener('change', function() {
+        const paisSeleccionado = this.value;
+        const cboCliente = document.getElementById('cboCliente');
+        
+        // 1. Ponemos un texto temporal para saber que sí detectó el clic
+        cboCliente.innerHTML = '<option value="">Cargando...</option>';
+
+        if (paisSeleccionado) {
+            // 2. Usamos encodeURIComponent para proteger los espacios (ej: Estados Unidos)
+            fetch('/api/clientes/' + encodeURIComponent(paisSeleccionado))
+                .then(respuesta => {
+                    if (!respuesta.ok) throw new Error("La ruta API no respondió bien.");
+                    return respuesta.json();
+                })
+                .then(clientes => {
+                    cboCliente.innerHTML = ''; // Limpiamos el texto de cargando
+
+                    // 3. Llenamos la lista
+                    clientes.forEach(cliente => {
+                        const option = document.createElement('option');
+                        option.value = cliente.IdCliente;
+                        option.text = cliente.NombreEmpresa;
+                        cboCliente.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error al cargar clientes:', error);
+                    alert('No se pudieron cargar los clientes. Asegúrate de haber reiniciado tu servidor.');
+                    cboCliente.innerHTML = '';
+                });
+        } else {
+            cboCliente.innerHTML = '';
+        }
+    });
+
+    document.getElementById('btnVerPedidos').addEventListener('click', function() {
+        const cboCliente = document.getElementById('cboCliente');
+        const idClienteSeleccionado = cboCliente.value;
+        const tablaBody = document.getElementById('tablaPedidos');
+
+        if (!idClienteSeleccionado) {
+            alert('Por favor, seleccione un cliente primero.');
+            return;
+        }
+
+        fetch('/api/pedidos/' + encodeURIComponent(idClienteSeleccionado))
+            .then(respuesta => respuesta.json())
+            .then(pedidos => {
+                tablaBody.innerHTML = ''; 
+
+                if (pedidos.length === 0) {
+                    tablaBody.innerHTML = '<tr><td colspan="4">Este cliente no tiene pedidos.</td></tr>';
+                    return;
+                }
+
+                pedidos.forEach(pedido => {
+                    const fechaPed = pedido.FechaPedido ? pedido.FechaPedido.substring(0, 10) : '';
+                    const fechaEnt = pedido.FechaEntrega ? pedido.FechaEntrega.substring(0, 10) : '';
+
+                    const tr = document.createElement('tr');
+                    
+                    tr.innerHTML = `
+                        <td><a href="/pedidos/detalle/${pedido.IdPedido}" style="color: #0000EE; text-decoration: underline;">${pedido.IdPedido}</a></td>
+                        <td>${fechaPed}</td>
+                        <td>${pedido.Empleado}</td>
+                        <td>${fechaEnt}</td>
+                    `;
+                    tablaBody.appendChild(tr);
+                });
+            })
+            .catch(error => console.error('Error al cargar pedidos:', error));
+    });
+</script>
+
+<%- include('partials/footer') %>

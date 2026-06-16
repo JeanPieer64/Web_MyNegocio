@@ -1,6 +1,5 @@
 const mysql = require('mysql2');
 
-// 1. PRIMERO definimos la constante 'db' usando la configuración
 const db = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -9,7 +8,6 @@ const db = mysql.createConnection({
     port: process.env.DB_PORT
 });
 
-// 2. AHORA SÍ podemos usar 'db' porque ya existe
 db.connect((err) => {
     if (err) {
         console.error('Error al conectar: ' + err.stack);
